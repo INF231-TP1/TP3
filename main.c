@@ -28,6 +28,17 @@ int main() {
         if (strcmp(command, "quit") == 0) {
             printf("Au revoir!\n");
             break;
+        } else if (strncmp(command, "gris ", 5) == 0) {
+            char filename[100];
+            if (sscanf(command + 5, "%99s", filename) == 1) {
+                if (gris_ppm(filename)) {
+                    printf("opération effectuée ; %s_gris.ppm créé\n", get_filename_without_ext(filename));
+                } else {
+                    printf("Erreur lors de la conversion en gris\n");
+                }
+            } else {
+                printf("Erreur: Arguments manquants pour 'gris'. Utilisation: gris fichier.ppm\n");
+            }
         }
     }
     
