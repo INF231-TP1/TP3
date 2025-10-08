@@ -26,5 +26,6 @@ int size_ppm(const char* filename);
 void trim_whitespace(char* str);
 int gris_ppm(const char* filename);
 char* get_filename_without_ext(const char* filename);
+int negatif_ppm(const char* filename_in, const char* filename_out);
 
 #endif

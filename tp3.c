@@ -183,3 +183,23 @@ int gris_ppm(const char* filename) {
     liberer_ppm(&image);
     return result;
 }
+
+int negatif_ppm(const char* filename_in, const char* filename_out) {
+    ImagePPM image;
+    if (!lire_ppm(filename_in, &image)) {
+        return 0;
+    }
+    
+    for (int i = 0; i < image.hauteur; i++) {
+        for (int j = 0; j < image.largeur; j++) {
+            Pixel* p = &image.pixels[i][j];
+            p->r = image.valeur_max - p->r;
+            p->g = image.valeur_max - p->g;
+            p->b = image.valeur_max - p->b;
+        }
+    }
+    
+    int result = ecrire_ppm(filename_out, &image);
+    liberer_ppm(&image);
+    return result;
+}
