@@ -27,5 +27,6 @@ void trim_whitespace(char* str);
 int gris_ppm(const char* filename);
 char* get_filename_without_ext(const char* filename);
 int negatif_ppm(const char* filename_in, const char* filename_out);
+int decouper_ppm(const char* filename, int l1, int l2, int c1, int c2, const char* filename_out);
 
 #endif

@@ -248,3 +248,47 @@ int dominante_ppm(const char* filename, char couleur, int valeur) {
     liberer_ppm(&image);
     return result;
 }
+
+int decouper_ppm(const char* filename, int l1, int l2, int c1, int c2, const char* filename_out) {
+    ImagePPM image;
+    if (!lire_ppm(filename, &image)) {
+        return 0;
+    }
+    
+    // Vérifier les limites (les coordonnées sont 1-based dans la commande)
+    if (l1 < 1 || l2 > image.hauteur || c1 < 1 || c2 > image.largeur || l1 >= l2 || c1 >= c2) {
+        printf("Erreur: Coordonnées de découpage invalides. Doit respecter: 1 <= l1 < l2 <= %d et 1 <= c1 < c2 <= %d\n", 
+               image.hauteur, image.largeur);
+        liberer_ppm(&image);
+        return 0;
+    }
+    
+    // Convertir en indices 0-based
+    l1--; l2--; c1--; c2--;
+    
+    ImagePPM resultat;
+    strcpy(resultat.version, image.version);
+    resultat.largeur = c2 - c1 + 1;
+    resultat.hauteur = l2 - l1 + 1;
+    resultat.valeur_max = image.valeur_max;
+    
+    // Allouer la mémoire pour le résultat
+    resultat.pixels = (Pixel**)malloc(resultat.hauteur * sizeof(Pixel*));
+    for (int i = 0; i < resultat.hauteur; i++) {
+        resultat.pixels[i] = (Pixel*)malloc(resultat.largeur * sizeof(Pixel));
+        for (int j = 0; j < resultat.largeur; j++) {
+            resultat.pixels[i][j] = image.pixels[l1 + i][c1 + j];
+        }
+    }
+    
+    int res = ecrire_ppm(filename_out, &resultat);
+    
+    // Libérer la mémoire
+    for (int i = 0; i < resultat.hauteur; i++) {
+        free(resultat.pixels[i]);
+    }
+    free(resultat.pixels);
+    liberer_ppm(&image);
+    
+    return res;
+}
