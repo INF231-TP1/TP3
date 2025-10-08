@@ -69,7 +69,22 @@ int main() {
             } else {
                 printf("Erreur: Arguments manquants pour 'dom'. Utilisation: dom c val fichier.ppm\n");
             }
+        } else if (strncmp(command, "cut ", 4) == 0) {
+    char filename[100], filename_out[100];
+    int l1, l2, c1, c2;
+    
+    if (sscanf(command + 4, "%99s %d %d %d %d %99s", filename, &l1, &l2, &c1, &c2, filename_out) == 6) {
+        if (l1 <= 0 || l2 <= 0 || c1 <= 0 || c2 <= 0) {
+            printf("Erreur: Les coordonnées doivent être des nombres positifs\n");
+        } else if (decouper_ppm(filename, l1, l2, c1, c2, filename_out)) {
+            printf("opération effectuée\n");
+        } else {
+            printf("Erreur lors du découpage\n");
         }
+    } else {
+        printf("Erreur: Arguments manquants pour 'cut'. Utilisation: cut fichier.ppm l1 l2 c1 c2 fichier_resultat.ppm\n");
+    }
+}
     }
     
     return 0;
