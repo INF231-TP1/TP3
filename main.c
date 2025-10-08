@@ -50,6 +50,25 @@ int main() {
             } else {
                 printf("Erreur: Arguments manquants pour 'neg'. Utilisation: neg fichier.ppm fichier_resultat.ppm\n");
             }
+        } else if (strncmp(command, "dom ", 4) == 0) {
+            char couleur_str[10];
+            int valeur;
+            char filename[100];
+    
+            if (sscanf(command + 4, "%9s %d %99s", couleur_str, &valeur, filename) == 3) {
+                if (strlen(couleur_str) != 1 || (couleur_str[0] != 'R' && couleur_str[0] != 'G' && couleur_str[0] != 'B')) {
+                    printf("Erreur: La couleur doit être R, G ou B\n");
+                } else {
+                    char couleur = couleur_str[0];
+                    if (dominante_ppm(filename, couleur, valeur)) {
+                        printf("opération effectuée ; %s_dom.ppm créé\n", get_filename_without_ext(filename));
+                    } else {
+                        printf("Erreur lors du traitement de la dominante\n");
+                    }
+                }
+            } else {
+                printf("Erreur: Arguments manquants pour 'dom'. Utilisation: dom c val fichier.ppm\n");
+            }
         }
     }
     

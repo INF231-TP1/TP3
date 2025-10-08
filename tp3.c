@@ -203,3 +203,48 @@ int negatif_ppm(const char* filename_in, const char* filename_out) {
     liberer_ppm(&image);
     return result;
 }
+
+int est_dans_limites(int x, int min, int max) {
+    if (x < min) return min;
+    if (x > max) return max;
+    return x;
+}
+
+int dominante_ppm(const char* filename, char couleur, int valeur) {
+    ImagePPM image;
+    if (!lire_ppm(filename, &image)) {
+        return 0;
+    }
+    
+    // Créer le nom du fichier de sortie
+    char output_filename[150];
+    snprintf(output_filename, sizeof(output_filename), "%s_dom.ppm", get_filename_without_ext(filename));
+    
+    // Appliquer l'effet de dominante
+    for (int i = 0; i < image.hauteur; i++) {
+        for (int j = 0; j < image.largeur; j++) {
+            Pixel* p = &image.pixels[i][j];
+            int max_val = p->r;
+            char dom = 'R';
+            
+            if (p->g > max_val) {
+                max_val = p->g;
+                dom = 'G';
+            }
+            if (p->b > max_val) {
+                max_val = p->b;
+                dom = 'B';
+            }
+            
+            if (dom == couleur) {
+                p->r = est_dans_limites(p->r + valeur, 0, image.valeur_max);
+                p->g = est_dans_limites(p->g + valeur, 0, image.valeur_max);
+                p->b = est_dans_limites(p->b + valeur, 0, image.valeur_max);
+            }
+        }
+    }
+    
+    int result = ecrire_ppm(output_filename, &image);
+    liberer_ppm(&image);
+    return result;
+}
