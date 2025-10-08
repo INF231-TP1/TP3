@@ -9,7 +9,7 @@
 int main() {
     char command[MAX_COMMAND_LENGTH];
     
-    printf("Application de traitement d'images PPM réalisée par XXX.\n");
+    print_banner();
     
     while (1) {
         printf("ppmviewer> ");
@@ -24,67 +24,7 @@ int main() {
         // Ignorer les lignes vides
         if (strlen(command) == 0) continue;
         
-        // Traitement basique des commandes
-        if (strcmp(command, "quit") == 0) {
-            printf("Au revoir!\n");
-            break;
-        } else if (strncmp(command, "gris ", 5) == 0) {
-            char filename[100];
-            if (sscanf(command + 5, "%99s", filename) == 1) {
-                if (gris_ppm(filename)) {
-                    printf("opération effectuée ; %s_gris.ppm créé\n", get_filename_without_ext(filename));
-                } else {
-                    printf("Erreur lors de la conversion en gris\n");
-                }
-            } else {
-                printf("Erreur: Arguments manquants pour 'gris'. Utilisation: gris fichier.ppm\n");
-            }
-        } else if (strncmp(command, "neg ", 4) == 0) {
-            char filename_in[100], filename_out[100];
-            if (sscanf(command + 4, "%99s %99s", filename_in, filename_out) == 2) {
-                if (negatif_ppm(filename_in, filename_out)) {
-                    printf("opération effectuée\n");
-                } else {
-                    printf("Erreur lors de la création du négatif\n");
-                }
-            } else {
-                printf("Erreur: Arguments manquants pour 'neg'. Utilisation: neg fichier.ppm fichier_resultat.ppm\n");
-            }
-        } else if (strncmp(command, "dom ", 4) == 0) {
-            char couleur_str[10];
-            int valeur;
-            char filename[100];
-    
-            if (sscanf(command + 4, "%9s %d %99s", couleur_str, &valeur, filename) == 3) {
-                if (strlen(couleur_str) != 1 || (couleur_str[0] != 'R' && couleur_str[0] != 'G' && couleur_str[0] != 'B')) {
-                    printf("Erreur: La couleur doit être R, G ou B\n");
-                } else {
-                    char couleur = couleur_str[0];
-                    if (dominante_ppm(filename, couleur, valeur)) {
-                        printf("opération effectuée ; %s_dom.ppm créé\n", get_filename_without_ext(filename));
-                    } else {
-                        printf("Erreur lors du traitement de la dominante\n");
-                    }
-                }
-            } else {
-                printf("Erreur: Arguments manquants pour 'dom'. Utilisation: dom c val fichier.ppm\n");
-            }
-        } else if (strncmp(command, "cut ", 4) == 0) {
-    char filename[100], filename_out[100];
-    int l1, l2, c1, c2;
-    
-    if (sscanf(command + 4, "%99s %d %d %d %d %99s", filename, &l1, &l2, &c1, &c2, filename_out) == 6) {
-        if (l1 <= 0 || l2 <= 0 || c1 <= 0 || c2 <= 0) {
-            printf("Erreur: Les coordonnées doivent être des nombres positifs\n");
-        } else if (decouper_ppm(filename, l1, l2, c1, c2, filename_out)) {
-            printf("opération effectuée\n");
-        } else {
-            printf("Erreur lors du découpage\n");
-        }
-    } else {
-        printf("Erreur: Arguments manquants pour 'cut'. Utilisation: cut fichier.ppm l1 l2 c1 c2 fichier_resultat.ppm\n");
-    }
-}
+        process_command(command);
     }
     
     return 0;
