@@ -21,12 +21,19 @@ int ecrire_ppm(const char* filename, const ImagePPM* image);
 void liberer_ppm(ImagePPM* image);
 
 int size_ppm(const char* filename);
+int dominante_ppm(const char* filename, char couleur, int valeur);
+int gris_ppm(const char* filename);
+int negatif_ppm(const char* filename_in, const char* filename_out);
+int decouper_ppm(const char* filename, int l1, int l2, int c1, int c2, const char* filename_out);
+int filtre_median_ppm(const char* filename_in, const char* filename_out);
 
 // Fonctions utilitaires
 void trim_whitespace(char* str);
-int gris_ppm(const char* filename);
 char* get_filename_without_ext(const char* filename);
-int negatif_ppm(const char* filename_in, const char* filename_out);
-int decouper_ppm(const char* filename, int l1, int l2, int c1, int c2, const char* filename_out);
+int est_dans_limites(int x, int min, int max);
+void trier_tableau(int* tab, int n);
+int mediane(int* tab, int n);
+void print_banner();
+void process_command(const char* command);
 
 #endif
