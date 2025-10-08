@@ -24,5 +24,7 @@ int size_ppm(const char* filename);
 
 // Fonctions utilitaires
 void trim_whitespace(char* str);
+int gris_ppm(const char* filename);
+char* get_filename_without_ext(const char* filename);
 
 #endif

@@ -153,3 +153,33 @@ int size_ppm(const char* filename) {
     liberer_ppm(&image);
     return 1;
 }
+
+char* get_filename_without_ext(const char* filename) {
+    static char result[100];
+    strcpy(result, filename);
+    char* dot = strrchr(result, '.');
+    if (dot) *dot = '\0';
+    return result;
+}
+
+int gris_ppm(const char* filename) {
+    ImagePPM image;
+    if (!lire_ppm(filename, &image)) {
+        return 0;
+    }
+    
+    char output_filename[150];
+    snprintf(output_filename, sizeof(output_filename), "%s_gris.ppm", get_filename_without_ext(filename));
+    
+    for (int i = 0; i < image.hauteur; i++) {
+        for (int j = 0; j < image.largeur; j++) {
+            Pixel* p = &image.pixels[i][j];
+            int moyenne = (p->r + p->g + p->b) / 3;
+            p->r = p->g = p->b = moyenne;
+        }
+    }
+    
+    int result = ecrire_ppm(output_filename, &image);
+    liberer_ppm(&image);
+    return result;
+}
